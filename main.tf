@@ -1,8 +1,16 @@
 terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "<=4.56.0"
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    organization = "company"
+
+    workspaces {
+      name = "my-app-prod"
+    }
+    required_providers {
+      aws = {
+        source  = "hashicorp/aws"
+        version = "<=4.56.0"
+      }
     }
   }
 }
@@ -14,7 +22,8 @@ provider "aws" {
 
 
 module "instance-us-east-1-ubuntu" {
-  source        = "./modules/aws-instance"
+  source        = "ASparkOfFire/instance/aws"
+  version       = "1.0.0"
   instance_name = "ubuntu"
   instance_type = "t2.micro"
   region        = "us-east-1"
@@ -22,11 +31,12 @@ module "instance-us-east-1-ubuntu" {
 }
 
 module "instance-ap-south-1-amazon_linux" {
-  source        = "./modules/aws-instance"
+  source        = "ASparkOfFire/instance/aws"
+  version       = "1.0.0"
   instance_name = "amazon_linux"
   instance_type = "t2.micro"
-  linux_flavour = "amazon_linux"
   region        = "ap-south-1"
+  linux_flavour = "amazon_linux"
 }
 
 
